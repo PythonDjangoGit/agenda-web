@@ -14,7 +14,6 @@ import java.util.List;
 public class ContatoDao {
 
     private Connection connection;
-    private Integer index;
 
     public ContatoDao() {
         this.connection = ConnectionDatabaseFactory.getPostgreSQLConnection();
@@ -22,21 +21,19 @@ public class ContatoDao {
 
     public ContatoDao(Connection connection) {
         this.connection = connection;
-        index = 1;
     }
 
     public void adicione(Contato contato) {
         String sql = "INSERT INTO contatos(id, nome, endereco, email, dataNascimento) VALUES(?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, index);
+            preparedStatement.setInt(1, contato.getId());
             preparedStatement.setString(2, contato.getNome());
             preparedStatement.setString(3, contato.getEndereco());
             preparedStatement.setString(4, contato.getEmail());
             preparedStatement.setDate(5, ApplicationUtil.toSqlDate(contato.getDataNascimento()));
             preparedStatement.execute();
             preparedStatement.close();
-            index++;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,6 +74,18 @@ public class ContatoDao {
                         ApplicationUtil.toCalendar(resultSet.getDate("datanascimento"))
                 ));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void remova(Integer contatoid){
+        String sql = "DELETE FROM CONTATOS WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, contatoid);
+            preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

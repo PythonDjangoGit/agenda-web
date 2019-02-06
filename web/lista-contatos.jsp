@@ -18,6 +18,7 @@
 <jstl-core:import url="cabecalho.jsp"/>
 
 <jsp:useBean id="dao" class="br.com.home.dao.ContatoDao"/>
+
 <table border="1">
     <jstl-core:forEach var="contato" items="${dao.lista}">
         <tr>
@@ -26,12 +27,12 @@
                 <jstl-core:choose>
                     <jstl-core:when test="${ not empty contato.email}">
                         <a href="mailto:${contato.email}">
-                                ${contato.email}
-                        </a>
-                    </jstl-core:when>
-                    <jstl-core:otherwise>
-                        Email nao informado
-                    </jstl-core:otherwise>
+                    ${contato.email}
+                    </a>
+                </jstl-core:when>
+                <jstl-core:otherwise>
+                    Email nao informado
+                </jstl-core:otherwise>
                 </jstl-core:choose>
             </td>
             <td>${contato.endereco}</td>

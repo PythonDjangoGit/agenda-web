@@ -20,7 +20,10 @@
 
 </head>
 <body>
-<form action="adicioneContato" method="post">
+<jstl-core:import url="cabecalho.jsp"/>
+<form action="sistema?logica=AdicionaContato" method="post">
+    <label for="campoId">ID:</label>
+    <input id="campoId" type="text" name="id">
     <label for="campoNome">Nome:</label>
     <input id="campoNome" type="text" name="nome">
     <label for="campoEmail">E-mail:</label>
@@ -30,6 +33,6 @@
     <tag-utils:campo-data id="dataNascimento" label="Data Nascimento:"/>
     <input type="submit" value="Gravar"/>
 </form>
-
+<jstl-core:import url="rodape.jsp"/>
 </body>
 </html>

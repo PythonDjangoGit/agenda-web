@@ -20,6 +20,11 @@ public class ContatoBuilder {
         return this.contato;
     }
 
+    public ContatoBuilder comId(Integer id){
+        this.contato.setId(id);
+        return this;
+    }
+
     public ContatoBuilder comNome(String nome) {
         this.contato.setNome(nome);
         return this;

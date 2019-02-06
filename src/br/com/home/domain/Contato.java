@@ -22,6 +22,9 @@ public class Contato implements Serializable {
         this.email = email;
         this.dataNascimento = dataNascimento;
     }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;

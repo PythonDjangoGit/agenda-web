@@ -41,8 +41,8 @@ public class AdicionaContatoServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter writer = resp.getWriter();
 
+        Integer id = ApplicationUtil.toInteger(req.getParameter("id"));
         String nome = req.getParameter("nome");
         String email = req.getParameter("email");
         String endereco = req.getParameter("endereco");
@@ -51,6 +51,7 @@ public class AdicionaContatoServlet extends HttpServlet {
         Calendar dataNascimento = ApplicationUtil.toCalendar(dataEmTexto);
 
         Contato contato = ContatoBuilder.getInstance()
+                .comId(id)
                 .comNome(nome)
                 .comEmail(email)
                 .comEndereco(endereco)
@@ -60,7 +61,9 @@ public class AdicionaContatoServlet extends HttpServlet {
             dao = new ContatoDao(ConnectionDatabaseFactory.getPostgreSQLConnection());
         }
         dao.adicione(contato);
-        writer.print("Contato " + contato.getNome() + " adicionado com sucesso.");
+
+        getServletContext().getRequestDispatcher("/contato-adicionado.jsp")
+                .forward(req, resp);
     }
 
     @Override

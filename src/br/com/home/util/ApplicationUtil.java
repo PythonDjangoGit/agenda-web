@@ -37,4 +37,14 @@ public class ApplicationUtil {
         calendar.setTimeInMillis(date.getTime());
         return calendar;
     }
+
+    public static Integer toInteger(String number){
+        Integer numero = 0;
+        try{
+            numero = Integer.parseInt(number);
+        }catch (NumberFormatException e){
+            System.out.println("Nao foi possivel converter a string em um numero inteiro.");
+        }
+        return numero;
+    }
 }
