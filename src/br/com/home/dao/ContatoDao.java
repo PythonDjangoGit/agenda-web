@@ -1,6 +1,7 @@
 package br.com.home.dao;
 
 import br.com.home.domain.Contato;
+import br.com.home.domain.builder.ContatoBuilder;
 import br.com.home.infra.ConnectionDatabaseFactory;
 import br.com.home.util.ApplicationUtil;
 
@@ -80,7 +81,7 @@ public class ContatoDao {
     }
 
     public void remova(Integer contatoid){
-        String sql = "DELETE FROM CONTATOS WHERE id = ?";
+        String sql = "DELETE FROM CONTATOS WHERE id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, contatoid);
@@ -89,5 +90,42 @@ public class ContatoDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void altere(Contato contato) {
+        String sql = "UPDATE CONTATOS SET nome=?, endereco=?, email=?, dataNascimento=? WHERE id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, contato.getNome());
+            preparedStatement.setString(2, contato.getEndereco());
+            preparedStatement.setString(3, contato.getEmail());
+            preparedStatement.setDate(4, ApplicationUtil.toSqlDate(contato.getDataNascimento()));
+            preparedStatement.setInt(5, contato.getId());
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Contato getContato(Integer id) {
+        String sql = "SELECT * FROM CONTATOS WHERE id = ?";
+        ContatoBuilder contato = ContatoBuilder.getInstance();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                contato
+                        .comId(resultSet.getInt("id"))
+                        .comNome(resultSet.getString("nome"))
+                        .comEndereco(resultSet.getString("endereco"))
+                        .comEmail(resultSet.getString("email"))
+                        .comDataNascimento(ApplicationUtil.toCalendar(resultSet.getDate("datanascimento")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contato.build();
     }
 }

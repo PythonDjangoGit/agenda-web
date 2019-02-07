@@ -23,6 +23,7 @@
                 <th>email</th>
                 <th>data nascimento</th>
                 <th>Opcoes</th>
+                <th>Opcoes</th>
             </thead>
             <tbody>
                 <jstl-core:forEach var="contato" items="${dao.lista}">
@@ -42,6 +43,9 @@
                         </td>
                         <td><jstl-formatting:formatDate value="${contato.dataNascimento.time}" pattern="dd/MM/yyyy"/></td>
                         <td><a href="${pageContext.request.contextPath}/sistema?logica=RemoveContato&id=${contato.id}">Excluir</a></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/sistema?logica=InformeDadosAlteraContato&id=${contato.id}">Alterar</a>
+                        </td>
                     </tr>
                 </jstl-core:forEach>
             </tbody>
