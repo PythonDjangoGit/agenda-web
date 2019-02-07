@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 
 @WebServlet("/sistema")
 public class ControllerServlet extends HttpServlet {
@@ -19,7 +20,8 @@ public class ControllerServlet extends HttpServlet {
         try {
             Class clazz = Class.forName(nomeDaClasseQualificado);
             Logica logica = (Logica) clazz.newInstance();
-            String pagina = logica.execute(req, resp);
+            Connection connection = (Connection) req.getAttribute("connection");
+            String pagina = logica.execute(req, resp, connection);
             req.getServletContext().getRequestDispatcher(pagina)
                     .forward(req, resp);
         } catch (Exception e) {

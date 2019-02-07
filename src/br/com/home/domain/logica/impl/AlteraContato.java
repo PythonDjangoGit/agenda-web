@@ -8,17 +8,19 @@ import br.com.home.util.ApplicationUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Connection;
 
 public class AlteraContato implements Logica {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse res) {
+    public String execute(HttpServletRequest req, HttpServletResponse res, Connection connection) {
         String id = req.getParameter("id");
         String nome = req.getParameter("nome");
         String endereco = req.getParameter("endereco");
         String email = req.getParameter("email");
         String dataNascimento = req.getParameter("dataNascimento");
 
-        ContatoDao contatoDao = new ContatoDao();
+        ContatoDao contatoDao = new ContatoDao(connection);
+
         Contato contato = ContatoBuilder.getInstance()
                 .comId(ApplicationUtil.toInteger(id))
                 .comNome(nome)
@@ -27,6 +29,6 @@ public class AlteraContato implements Logica {
                 .comDataNascimento(ApplicationUtil.toCalendar(dataNascimento))
                 .build();
         contatoDao.altere(contato);
-        return "/contato-alterado.jsp?nome=" + nome;
+        return "/WEB-INF/jsp/contato-alterado.jsp?nome=" + nome;
     }
 }
