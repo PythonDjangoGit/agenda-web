@@ -13,6 +13,6 @@ public class HelloServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PrintWriter writer = resp.getWriter();
-        writer.print("Hello World");
+        resp.sendRedirect("/WEB-INF/jsp/hello.jsp");
     }
 }

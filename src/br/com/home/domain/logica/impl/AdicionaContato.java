@@ -9,10 +9,19 @@ import br.com.home.util.ApplicationUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
+import java.util.Arrays;
+import java.util.Map;
 
 public class AdicionaContato implements Logica {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res, Connection connection) {
+
+        Map<String, String[]> parameterMap = req.getParameterMap();
+        System.out.println("Imprimindo todos os parametros enviados");
+        for (String parametro : parameterMap.keySet()) {
+            System.out.println(parametro + "=" + Arrays.toString(parameterMap.get(parametro)));
+        }
+
         String id = req.getParameter("id");
         String nome = req.getParameter("nome");
         String endereco = req.getParameter("endereco");

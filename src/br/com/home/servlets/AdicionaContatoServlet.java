@@ -6,6 +6,9 @@ import br.com.home.domain.builder.ContatoBuilder;
 import br.com.home.infra.ConnectionDatabaseFactory;
 import br.com.home.util.ApplicationUtil;
 
+import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
+import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Properties;
 
-@WebServlet("/adicioneContato")
+@WebServlet(asyncSupported = true, urlPatterns = {"/adicioneContato"})
 public class AdicionaContatoServlet extends HttpServlet {
 
     private ContatoDao dao;
@@ -41,7 +43,42 @@ public class AdicionaContatoServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        AsyncContext asyncContext = req.startAsync(req, resp);
+        try {
+            System.out.println("AGUARDANDO 5 SEGUNDOS EM THREAD SEPARADA");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        asyncContext.addListener(new AsyncListener() {
+            @Override
+            public void onComplete(AsyncEvent asyncEvent) throws IOException {
+                System.out.println("DISPACHANDO PARA HELLO SERVLETHELLO");
+                try {
+                    asyncEvent.getAsyncContext().getRequest().getRequestDispatcher("/WEB-INF/jsp/hello.jsp")
+                            .forward(req, resp);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTimeout(AsyncEvent asyncEvent) throws IOException {
+
+            }
+
+            @Override
+            public void onError(AsyncEvent asyncEvent) throws IOException {
+
+            }
+
+            @Override
+            public void onStartAsync(AsyncEvent asyncEvent) throws IOException {
+
+            }
+
+        });
         Integer id = ApplicationUtil.toInteger(req.getParameter("id"));
         String nome = req.getParameter("nome");
         String email = req.getParameter("email");
@@ -62,6 +99,7 @@ public class AdicionaContatoServlet extends HttpServlet {
         }
         dao.adicione(contato);
 
+        asyncContext.complete();
         getServletContext().getRequestDispatcher("/contato-adicionado.jsp")
                 .forward(req, resp);
     }

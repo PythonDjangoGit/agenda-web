@@ -3,6 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <session-config>
+        <session-timeout>3</session-timeout>
+    </session-config>
     <welcome-file-list>
         <welcome-file>adiciona-contato.jsp</welcome-file>
     </welcome-file-list>
@@ -10,4 +13,28 @@
         <error-code>404</error-code>
         <location>/WEB-INF/jsp/404.html</location>
     </error-page>
+    <jsp-config>
+        <jsp-property-group>
+            <display-name>todos os jsps</display-name>
+            <description>configuracoes gerais de todos os jsps</description>
+            <url-pattern>*.jsp</url-pattern>
+            <scripting-invalid>true</scripting-invalid>
+            <page-encoding>UTF-8</page-encoding>
+            <el-ignored>false</el-ignored>
+            <!--<include-prelude>/jspAntes.jsp</include-prelude>-->
+            <!--<include-coda>/jspDepois.jsp</include-coda>-->
+        </jsp-property-group>
+    </jsp-config>
+    <listener>
+        <listener-class>br.com.home.listeners.MeuListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>br.com.home.listeners.MeuRequestListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>br.com.home.listeners.MeuSessionListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>br.com.home.listeners.MeuSessionAtributeListener</listener-class>
+    </listener>
 </web-app>
